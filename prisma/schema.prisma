@@ -9,3 +9,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Questionnaires {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime
+  category  Int
+  startDate DateTime
+  endDate   DateTime
+  author    Int
+}
+
+model Polleditems {
+  id Int  @id @default(autoincrement())
+  itemId Int
+  questionnairId Int
+}
+
+model Polls {
+  id Int  @id @default(autoincrement())
+  questionnaireId Int
+  userId Int
+  result Int
+  createdAt DateTime
+}
