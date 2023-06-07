@@ -49,48 +49,48 @@ model Items {
   id    Int     @id @default(autoincrement())
   name String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
-  itemCategory Number
+  itemCategory Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   inTheOffice Boolean
-  author Number
+  author Int
   pollItem Boolean
   isDiscontinued Boolean
 }
 
 model Posts {
   id    Int     @id @default(autoincrement())
-  userId Number
+  userId Int
   content String @db.VarChar(255)
-  itemId Number
+  itemId Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
 }
 
 model Comments {
   id    Int     @id @default(autoincrement())
-  userId Number
+  userId Int
   content String
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  postId Number
+  postId Int
 }
 
 model Likes {
   id    Int     @id @default(autoincrement())
-  userId Number
+  userId Int
   content String
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  postId Number
+  postId Int
 }
 
 model StockHistory {
   id    Int     @id @default(autoincrement())
-  itamId Number
-  quantity Number
+  itamId Int
+  quantity Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   incOrDec Boolean
-  stockAmount Number
+  stockAmount Int
 }
 
 model ItemCategory {
@@ -107,10 +107,10 @@ model Images {
 
 model Banners {
   id    Int     @id @default(autoincrement())
-  category Number
+  category Int
   image String
   createdAt DateTime  @default(now()) @map(name: "created_at")
-  author Number
+  author Int
 }
 
 model Conntacts {
