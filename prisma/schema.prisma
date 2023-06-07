@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model Questionnaires {
   id        Int      @id @default(autoincrement())
   name      String
@@ -32,4 +33,87 @@ model Polls {
   userId Int
   result Int
   createdAt DateTime
+
+model Users {
+  id    Int     @id @default(autoincrement())
+  firstName String @db.VarChar(10)
+  lastName String @db.VarChar(10)
+  email String @unique @db.VarChar(40)
+  password String @db.VarChar(16)
+  isAdmin Boolean
+  authId String
+}
+
+model Items {
+  id    Int     @id @default(autoincrement())
+  name String  @unique @db.VarChar(18)
+  description  String @db.VarChar(200)
+  itemCategory Number
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  inTheOffice Boolean
+  author Number
+  pollItem Boolean
+  isDiscontinued Boolean
+}
+
+model Posts {
+  id    Int     @id @default(autoincrement())
+  userId Number
+  content String @db.VarChar(255)
+  itemId Number
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Comments {
+  id    Int     @id @default(autoincrement())
+  userId Number
+  content String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  postId Number
+}
+
+model Likes {
+  id    Int     @id @default(autoincrement())
+  userId Number
+  content String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  postId Number
+}
+
+model StockHistory {
+  id    Int     @id @default(autoincrement())
+  itamId Number
+  quantity Number
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  incOrDec Boolean
+  stockAmount Number
+}
+
+model ItemCategory {
+  id    Int     @id @default(autoincrement())
+  name String
+}
+
+model Images {
+  id    Int     @id @default(autoincrement())
+  itemOrPost String
+  path String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+}
+
+model Banners {
+  id    Int     @id @default(autoincrement())
+  category Number
+  image String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  author Number
+}
+
+model Conntacts {
+  id    Int     @id @default(autoincrement())
+  category String
+  content String @db.VarChar(500)
 }
