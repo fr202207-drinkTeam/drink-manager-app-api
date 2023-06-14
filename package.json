@@ -4,8 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:fr202207-drinkTeam/drink-manager-app-api.git",
   "license": "MIT",
-  "scripts":{
-    "start":"nodemon server.js"
+  "scripts": {
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",

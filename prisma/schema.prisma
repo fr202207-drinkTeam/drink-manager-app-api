@@ -55,13 +55,17 @@ model Items {
   author Int
   pollItem Boolean
   isDiscontinued Boolean
+  approval Boolean
+  manufacturer String @db.VarChar(18)
+  purchaseLocation String @db.VarChar(18)
 }
 
 model Posts {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
-  itemId Int
+  drinkId Int
+  snackId Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
 }
