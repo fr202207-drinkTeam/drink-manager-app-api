@@ -1,21 +1,36 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Questionnaires" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "category" INTEGER NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3) NOT NULL,
+    "author" INTEGER NOT NULL,
 
-  - You are about to drop the column `createdAt` on the `Polls` table. All the data in the column will be lost.
-  - You are about to drop the column `createdAt` on the `Questionnaires` table. All the data in the column will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
+    CONSTRAINT "Questionnaires_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- AlterTable
-ALTER TABLE "Polls" DROP COLUMN "createdAt",
-ADD COLUMN     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+-- CreateTable
+CREATE TABLE "Polleditems" (
+    "id" SERIAL NOT NULL,
+    "itemId" INTEGER NOT NULL,
+    "questionnairId" INTEGER NOT NULL,
 
--- AlterTable
-ALTER TABLE "Questionnaires" DROP COLUMN "createdAt",
-ADD COLUMN     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    CONSTRAINT "Polleditems_pkey" PRIMARY KEY ("id")
+);
 
--- DropTable
-DROP TABLE "User";
+-- CreateTable
+CREATE TABLE "Polls" (
+    "id" SERIAL NOT NULL,
+    "questionnaireId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "result" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Polls_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Users" (
