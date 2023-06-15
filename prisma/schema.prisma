@@ -14,17 +14,20 @@ datasource db {
 model Questionnaires {
   id        Int      @id @default(autoincrement())
   name      String
+  description String
   createdAt DateTime @default(now()) @map(name: "created_at")
   category  Int
   startDate DateTime
   endDate   DateTime
   author    Int
+  Polleditems Polleditems[]
 }
 
 model Polleditems {
   id Int  @id @default(autoincrement())
   itemId Int
   questionnairId Int
+  Questionnaire Questionnaires @relation(fields: [questionnairId], references: [id], onDelete: Cascade)
 }
 
 model Polls {
@@ -55,17 +58,13 @@ model Items {
   author Int
   pollItem Boolean
   isDiscontinued Boolean
-  approval Boolean
-  manufacturer String @db.VarChar(18)
-  purchaseLocation String @db.VarChar(18)
 }
 
 model Posts {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
-  drinkId Int
-  snackId Int
+  itemId Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
 }
