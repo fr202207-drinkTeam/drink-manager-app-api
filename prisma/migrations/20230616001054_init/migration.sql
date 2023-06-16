@@ -151,3 +151,6 @@ CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Items_name_key" ON "Items"("name");
+
+-- AddForeignKey
+ALTER TABLE "Polleditems" ADD CONSTRAINT "Polleditems_questionnairId_fkey" FOREIGN KEY ("questionnairId") REFERENCES "Questionnaires"("id") ON DELETE CASCADE ON UPDATE CASCADE;
