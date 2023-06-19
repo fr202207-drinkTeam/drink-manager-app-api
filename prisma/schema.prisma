@@ -20,14 +20,16 @@ model Questionnaire {
   startDate DateTime
   endDate   DateTime
   author    Int
-  Polleditems Polleditem[]
+  Polleditems PolledItem[]
+  @@map("Questionnaires")
 }
 
-model Polleditem {
+model PolledItem {
   id Int  @id @default(autoincrement())
   itemId Int
   questionnairId Int
   Questionnaire Questionnaire @relation(fields: [questionnairId], references: [id], onDelete: Cascade)
+  @@map("PolledItems")
 }
 
 model Poll {
@@ -36,6 +38,7 @@ model Poll {
   userId Int
   result Int
   createdAt DateTime @default(now()) @map(name: "created_at")
+  @@map("Polls")
 }
 
 model User {
@@ -47,6 +50,7 @@ model User {
   confirmPassword String @db.VarChar(16)
   isAdmin Boolean
   authId String
+  @@map("Users")
 }
 
 model Item {
@@ -59,6 +63,7 @@ model Item {
   author Int
   pollItem Boolean
   isDiscontinued Boolean
+  @@map("Items")
 }
 
 model Post {
@@ -68,6 +73,7 @@ model Post {
   itemId Int
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  @@map("Posts")
 }
 
 model Comment {
@@ -77,6 +83,7 @@ model Comment {
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   postId Int
+  @@map("Comments")
 }
 
 model Like {
@@ -86,6 +93,7 @@ model Like {
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   postId Int
+  @@map("Likes")
 }
 
 model StockHistory {
@@ -95,11 +103,13 @@ model StockHistory {
   createdAt DateTime  @default(now()) @map(name: "created_at")
   incOrDec Boolean
   stockAmount Int
+  @@map("StockHistories")
 }
 
 model ItemCategory {
   id    Int     @id @default(autoincrement())
   name String
+  @@map("ItemCategories")
 }
 
 model Image {
@@ -107,6 +117,7 @@ model Image {
   itemOrPost String
   path String
   createdAt DateTime  @default(now()) @map(name: "created_at")
+  @@map("Images")
 }
 
 model Banner {
@@ -115,10 +126,12 @@ model Banner {
   image String
   createdAt DateTime  @default(now()) @map(name: "created_at")
   author Int
+  @@map("Banners")
 }
 
 model Conntact {
   id    Int     @id @default(autoincrement())
   category String
   content String @db.VarChar(500)
+  @@map("Contacts")
 }
