@@ -29,6 +29,36 @@ async function main() {
       isAdmin: false,
     },
   });
+
+  await prisma.item.upsert({
+    where: { name: "ブライトブレンド" },
+    update: {},
+    create: {
+      name: "ブライトブレンド",
+      description: "ミディアムローストの豆をブレンドしたブライトブレンドは、キャラメル、ベリー、はちみつのバランスのとれたほんのり甘い香りが楽しめる一杯です。",
+      itemCategory: 2,
+      inTheOffice: true,
+      author: "1",
+      approval: true,
+      pollItem: false,
+      isDiscontinued: false
+    },
+  });
+
+  await prisma.item.upsert({
+    where: { name: "LAVAZZA CLASSICO" },
+    update: {},
+    create: {
+      name: "LAVAZZA CLASSICO",
+      description: "しっかりとした珈琲感とドライフルーツの風味が特徴のミディアムローストコーヒー。バランスのとれたリッチな味わいがお好みの方へオススメです。",
+      itemCategory: 2,
+      inTheOffice: false,
+      author: "1",
+      approval: true,
+      pollItem: false,
+      isDiscontinued: false
+    },
+  });
 }
 
 main()

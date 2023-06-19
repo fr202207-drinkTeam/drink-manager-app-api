@@ -58,9 +58,12 @@ model Item {
   name String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
   itemCategory Int
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  inTheOffice Boolean
-  author Int
+  createdAt DateTime  @default(now())
+  inTheOffice Boolean?
+  author String
+  approval Boolean
+  manufacturer Int?
+  purchaseLocation Int?
   pollItem Boolean
   isDiscontinued Boolean
   @@map("Items")
@@ -71,9 +74,19 @@ model Post {
   userId Int
   content String @db.VarChar(255)
   itemId Int
+  postImages PostImage[]
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   @@map("Posts")
+}
+
+model PostImage {
+  id    Int     @id @default(autoincrement())
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  path String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  @@map("PostImages")
 }
 
 model Comment {

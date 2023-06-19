@@ -5,6 +5,7 @@ const PORT = 50000;
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const cors = require("cors");
+const postController = require('./controllers/postController')
 
 // CORS設定
 app.use(cors());
@@ -19,10 +20,7 @@ app.get("/items", async (req, res) => {
   return res.json(items);
 });
 
-app.get("/posts", async (req, res) => {
-  const posts = await prisma.posts.findMany();
-  return res.json(posts);
-});
+app.post("/posts", postController.postAddPost);
 
 //投票//
 app.get("/questionnaires", async (req, res) => {
