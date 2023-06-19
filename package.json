@@ -1,6 +1,9 @@
 {
   "name": "drink-app2",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "main": "index.js",
   "repository": "git@github.com:fr202207-drinkTeam/drink-manager-app-api.git",
   "license": "MIT",
