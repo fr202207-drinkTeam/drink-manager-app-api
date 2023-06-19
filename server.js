@@ -70,7 +70,7 @@ app.get('/items/:id', async (req, res) => {
 // 商品名条件で商品を取得
 app.get('/itemName/:name', async (req, res) => {
   const name = req.params.name;
-  const items = await prisma.items.findMany({
+  const items = await prisma.item.findMany({
     where: {
       name: {
         equals: name,
@@ -82,9 +82,9 @@ app.get('/itemName/:name', async (req, res) => {
 
 // 商品追加
 app.post('/items', async (req, res) => {
-  const { name, description, itemCategory, createdAt, inTheOffice, author, pollItem, isDiscontinued } = req.body
-  const item = await prisma.items.create({
-    data: { name, description, itemCategory, createdAt, inTheOffice, author, pollItem, isDiscontinued }
+  const { name, description, itemCategory, inTheOffice, approval, author, pollItem, isDiscontinued } = req.body
+  const item = await prisma.item.create({
+    data: { name, description, itemCategory, inTheOffice, approval, author, pollItem, isDiscontinued }
   })
   return res.json(item)
 })
