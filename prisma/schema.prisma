@@ -11,7 +11,7 @@ datasource db {
 }
 
 
-model Questionnaires {
+model Questionnaire {
   id        Int      @id @default(autoincrement())
   name      String
   description String
@@ -20,17 +20,17 @@ model Questionnaires {
   startDate DateTime
   endDate   DateTime
   author    Int
-  Polleditems Polleditems[]
+  Polleditems Polleditem[]
 }
 
-model Polleditems {
+model Polleditem {
   id Int  @id @default(autoincrement())
   itemId Int
   questionnairId Int
-  Questionnaire Questionnaires @relation(fields: [questionnairId], references: [id], onDelete: Cascade)
+  Questionnaire Questionnaire @relation(fields: [questionnairId], references: [id], onDelete: Cascade)
 }
 
-model Polls {
+model Poll {
   id Int  @id @default(autoincrement())
   questionnaireId Int
   userId Int
@@ -38,17 +38,18 @@ model Polls {
   createdAt DateTime @default(now()) @map(name: "created_at")
 }
 
-model Users {
+model User {
   id    Int     @id @default(autoincrement())
   firstName String @db.VarChar(10)
   lastName String @db.VarChar(10)
   email String @unique @db.VarChar(40)
   password String @db.VarChar(16)
+  confirmPassword String @db.VarChar(16)
   isAdmin Boolean
   authId String
 }
 
-model Items {
+model Item {
   id    Int     @id @default(autoincrement())
   name String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
@@ -60,7 +61,7 @@ model Items {
   isDiscontinued Boolean
 }
 
-model Posts {
+model Post {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
@@ -69,7 +70,7 @@ model Posts {
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
 }
 
-model Comments {
+model Comment {
   id    Int     @id @default(autoincrement())
   userId Int
   content String
@@ -78,7 +79,7 @@ model Comments {
   postId Int
 }
 
-model Likes {
+model Like {
   id    Int     @id @default(autoincrement())
   userId Int
   content String
@@ -101,14 +102,14 @@ model ItemCategory {
   name String
 }
 
-model Images {
+model Image {
   id    Int     @id @default(autoincrement())
   itemOrPost String
   path String
   createdAt DateTime  @default(now()) @map(name: "created_at")
 }
 
-model Banners {
+model Banner {
   id    Int     @id @default(autoincrement())
   category Int
   image String
@@ -116,7 +117,7 @@ model Banners {
   author Int
 }
 
-model Conntacts {
+model Conntact {
   id    Int     @id @default(autoincrement())
   category String
   content String @db.VarChar(500)
