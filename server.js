@@ -16,7 +16,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/items", async (req, res) => {
-  const items = await prisma.items.findMany();
+  const items = await prisma.item.findMany();
   return res.json(items);
 });
 

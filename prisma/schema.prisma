@@ -66,6 +66,7 @@ model Item {
   purchaseLocation String?
   pollItem Boolean
   isDiscontinued Boolean
+  posts Post[]
   @@map("Items")
 }
 
@@ -73,7 +74,8 @@ model Post {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
-  itemId Int
+  item Item? @relation(fields: [itemId], references: [id])
+  itemId Int?
   postImages PostImage[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -85,7 +87,7 @@ model PostImage {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
   path String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
+  createdAt DateTime  @default(now())
   @@map("PostImages")
 }
 
@@ -131,14 +133,6 @@ model ItemImage {
   imagePath String
   createdAt DateTime  @default(now())
   @@map("ItemImages")
-}
-
-model PostImage {
-  id    Int     @id @default(autoincrement())
-  postId Int
-  imagePath String
-  createdAt DateTime  @default(now())
-  @@map("PostImages")
 }
 
 model Banner {
