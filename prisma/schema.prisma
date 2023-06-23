@@ -21,6 +21,7 @@ model Questionnaire {
   endDate   DateTime
   author    Int
   Polleditems PolledItem[]
+  Poll Poll[]
   @@map("Questionnaires")
 }
 
@@ -35,6 +36,7 @@ model PolledItem {
 model Poll {
   id Int  @id @default(autoincrement())
   questionnaireId Int
+  Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
   createdAt DateTime @default(now())
@@ -52,7 +54,6 @@ model User {
   authId String
   @@map("Users")
 }
-
 model Item {
   id    Int     @id @default(autoincrement())
   name String  @unique @db.VarChar(18)

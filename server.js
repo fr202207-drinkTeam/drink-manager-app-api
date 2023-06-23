@@ -20,11 +20,15 @@ app.get("/items", async (req, res) => {
   return res.json(items);
 });
 
+// app.get("/posts", async (req, res) => {
+//   const posts = await prisma.post.findMany();
+//   return res.json(posts);
+// });
 app.post("/posts", postController.postAddPost);
 
 //投票//
 app.get("/questionnaires", async (req, res) => {
-  const questionnaires = await prisma.questionnaires.findMany();
+  const questionnaires = await prisma.questionnaire.findMany();
   return res.json(questionnaires);
 });
 
@@ -32,9 +36,9 @@ app.get("/questionnaires", async (req, res) => {
 app.get("/questionnaires/:category", async (req, res) => {
   try {
     const category = parseInt(req.params.category);
-    const questionnaires = await prisma.questionnaires.findMany({
+    const questionnaires = await prisma.questionnaire.findMany({
       where: {
-        category: category,
+        category:category,
       },
       include: {
         Polleditems: true,
@@ -49,7 +53,7 @@ app.get("/questionnaires/:category", async (req, res) => {
 app.get("/questionnairesresult/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const questionnaires = await prisma.questionnaires.findMany({
+    const questionnaires = await prisma.questionnaire.findMany({
       where: {
         id: Number(id),
       }
@@ -59,13 +63,35 @@ app.get("/questionnairesresult/:id", async (req, res) => {
     console.error(error);
   }
 });
+app.get("/pollcategory/:category", async (req, res) => {
+  try {
+    const category = parseInt(req.params.category);
+    const polls = await prisma.poll.findMany({
+      where: {
+        category:category,
+      }
+    });
+    return res.json(polls);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 //アンケートIDごとに票を振り分け
 app.get("/polls/:id", async (req, res) => {
   const id = req.params.id;
-  const polls = await prisma.polls.findMany({
+  const polls = await prisma.poll.findMany({
     where: {
       id: Number(id),
+    },
+  });
+  return res.json(polls);
+});
+app.get("/pollsdata/:questionnaireId", async (req, res) => {
+  const questionnaireId = parseInt(req.params.questionnaireId) ;
+  const polls = await prisma.poll.findMany({
+    where: {
+      questionnaireId:Number(questionnaireId)
     },
   });
   return res.json(polls);
@@ -85,7 +111,7 @@ app.get('/items/:id', async (req, res) => {
 
 app.get("/questionnaires/:id", async (req, res) => {
   const id = req.params.id;
-  const questionnaires = await prisma.questionnaires.findMany({
+  const questionnaires = await prisma.questionnaire.findMany({
     where: {
       id: Number(id),
     },
@@ -117,7 +143,7 @@ app.post('/items', async (req, res) => {
 
 app.post("/questionnaires", async (req, res) => {
   const { name, description, createdAt, category,endDate,startDate,author,polleditems} = req.body;
-  const questionnaires = await prisma.questionnaires.create({
+  const questionnaires = await prisma.questionnaire.create({
     data: {
       name,
       description,
@@ -133,7 +159,7 @@ app.post("/questionnaires", async (req, res) => {
 });
 app.post("/polleditems", async (req, res) => {
   const { itemId,questionnairId} = req.body;
-  const questionnaires = await prisma.polleditems.create({
+  const questionnaires = await prisma.polleditem.create({
     data: {
       itemId,
       questionnairId,
@@ -143,7 +169,7 @@ app.post("/polleditems", async (req, res) => {
 });
 app.post("/poll", async (req, res) => {
   const { userId,questionnaireId,result,category,createdAt} = req.body;
-  const poll = await prisma.polls.create({
+  const poll = await prisma.poll.create({
     data: {
       userId,
       questionnaireId,
@@ -154,3 +180,40 @@ app.post("/poll", async (req, res) => {
   });
   return res.json(poll);
 });
+////
+// user系
+app.get("/user/:email", async (req, res) => {
+  const email = req.params.email;
+  const user = await prisma.user.findMany({
+    where: {
+      email,
+    },
+  });
+  return res.json(user);
+});
+app.post("/user", async (req, res) => {
+  const user = await prisma.user.create({
+    data: req.body,
+  });
+  return res.json(user);
+});
+app.get("/user/:id", async (req, res) => {
+  const id = parseInt(req.params.id) ;
+  const user = await prisma.user.findMany({
+    where:{
+      id: Number(id)
+    }
+  });
+  return res.json(user);
+});
+app.get("/userauth/:authId", async (req, res) => {
+  const authId=req.params.authId
+  const users = await prisma.user.findMany({
+    where:{
+      authId
+    }
+  });
+  return res.json(users);
+});
+
+///
