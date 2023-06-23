@@ -21,6 +21,7 @@ model Questionnaire {
   endDate   DateTime
   author    Int
   Polleditems PolledItem[]
+  Poll Poll[]
   @@map("Questionnaires")
 }
 
@@ -35,6 +36,7 @@ model PolledItem {
 model Poll {
   id Int  @id @default(autoincrement())
   questionnaireId Int
+  Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
   createdAt DateTime @default(now())
@@ -52,7 +54,6 @@ model User {
   authId String
   @@map("Users")
 }
-
 model Item {
   id    Int     @id @default(autoincrement())
   itemName String  @unique @db.VarChar(18)
@@ -67,6 +68,7 @@ model Item {
   pollItem Boolean
   isDiscontinued Boolean
   images ItemImage[]
+  posts PostImage[]
   @@map("Items")
 }
 
@@ -74,10 +76,21 @@ model Post {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
-  itemId Int
+  item Item? @relation(fields: [itemId], references: [id])
+  itemId Int?
+  postImages PostImage[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   @@map("Posts")
+}
+
+model PostImage {
+  id    Int     @id @default(autoincrement())
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  path String
+  createdAt DateTime  @default(now())
+  @@map("PostImages")
 }
 
 model Comment {
@@ -123,14 +136,6 @@ model ItemImage {
   imagePath String 
   createdAt DateTime  @default(now())
   @@map("ItemImages")
-}
-
-model PostImage {
-  id    Int     @id @default(autoincrement())
-  postId Int
-  imagePath String
-  createdAt DateTime  @default(now())
-  @@map("PostImages")
 }
 
 model Banner {
