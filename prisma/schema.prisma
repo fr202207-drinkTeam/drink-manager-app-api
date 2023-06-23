@@ -55,7 +55,7 @@ model User {
 
 model Item {
   id    Int     @id @default(autoincrement())
-  name String  @unique @db.VarChar(18)
+  itemName String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
   itemCategory Int
   createdAt DateTime  @default(now())
@@ -66,6 +66,7 @@ model Item {
   purchaseLocation String?
   pollItem Boolean
   isDiscontinued Boolean
+  images ItemImage[]
   @@map("Items")
 }
 
@@ -117,8 +118,9 @@ model ItemCategory {
 
 model ItemImage {
   id    Int     @id @default(autoincrement())
+  item   Item   @relation(fields: [itemId], references: [id])
   itemId Int
-  imagePath String
+  imagePath String 
   createdAt DateTime  @default(now())
   @@map("ItemImages")
 }
