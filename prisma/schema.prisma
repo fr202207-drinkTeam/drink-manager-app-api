@@ -15,7 +15,7 @@ model Questionnaire {
   id        Int      @id @default(autoincrement())
   name      String
   description String
-  createdAt DateTime @default(now()) @map(name: "created_at")
+  createdAt DateTime @default(now())
   category  Int
   startDate DateTime
   endDate   DateTime
@@ -39,8 +39,7 @@ model Poll {
   Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
-  category Int
-  createdAt DateTime @default(now()) @map(name: "created_at")
+  createdAt DateTime @default(now())
   @@map("Polls")
 }
 
@@ -62,12 +61,13 @@ model Item {
   itemCategory Int
   createdAt DateTime  @default(now())
   inTheOffice Boolean?
-  author String
+  author Int
   approval Boolean
   manufacturer String?
   purchaseLocation String?
   pollItem Boolean
   isDiscontinued Boolean
+  posts Post[]
   @@map("Items")
 }
 
@@ -75,18 +75,29 @@ model Post {
   id    Int     @id @default(autoincrement())
   userId Int
   content String @db.VarChar(255)
-  itemId Int
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  item Item? @relation(fields: [itemId], references: [id])
+  itemId Int?
+  postImages PostImage[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   @@map("Posts")
+}
+
+model PostImage {
+  id    Int     @id @default(autoincrement())
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  path String
+  createdAt DateTime  @default(now())
+  @@map("PostImages")
 }
 
 model Comment {
   id    Int     @id @default(autoincrement())
   userId Int
   content String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   postId Int
   @@map("Comments")
 }
@@ -95,8 +106,8 @@ model Like {
   id    Int     @id @default(autoincrement())
   userId Int
   content String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   postId Int
   @@map("Likes")
 }
@@ -105,7 +116,7 @@ model StockHistory {
   id    Int     @id @default(autoincrement())
   itamId Int
   quantity Int
-  createdAt DateTime  @default(now()) @map(name: "created_at")
+  createdAt DateTime  @default(now())
   incOrDec Boolean
   stockAmount Int
   @@map("StockHistories")
@@ -113,29 +124,30 @@ model StockHistory {
 
 model ItemCategory {
   id    Int     @id @default(autoincrement())
-  name String
+  name String @unique
   @@map("ItemCategories")
 }
 
-model Image {
+model ItemImage {
   id    Int     @id @default(autoincrement())
-  itemOrPost String
-  path String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  @@map("Images")
+  itemId Int
+  imagePath String
+  createdAt DateTime  @default(now())
+  @@map("ItemImages")
 }
 
 model Banner {
   id    Int     @id @default(autoincrement())
   category Int
   image String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
+  createdAt DateTime  @default(now())
   author Int
   @@map("Banners")
 }
 
 model Conntact {
   id    Int     @id @default(autoincrement())
+  author Int
   category String
   content String @db.VarChar(500)
   @@map("Contacts")

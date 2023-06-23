@@ -5,6 +5,7 @@ const PORT = 50000;
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const cors = require("cors");
+const postController = require('./controllers/postController')
 
 // CORS設定
 app.use(cors());
@@ -19,10 +20,11 @@ app.get("/items", async (req, res) => {
   return res.json(items);
 });
 
-app.get("/posts", async (req, res) => {
-  const posts = await prisma.post.findMany();
-  return res.json(posts);
-});
+// app.get("/posts", async (req, res) => {
+//   const posts = await prisma.post.findMany();
+//   return res.json(posts);
+// });
+app.post("/posts", postController.postAddPost);
 
 //投票//
 app.get("/questionnaires", async (req, res) => {
@@ -95,6 +97,18 @@ app.get("/pollsdata/:questionnaireId", async (req, res) => {
   return res.json(polls);
 });
 
+// id条件で商品を取得
+app.get('/items/:id', async (req, res) => {
+  const id = req.params.id;
+  const items = await prisma.items.findMany({
+    where: {
+      id: Number(id),
+    },
+  })
+  return res.json(items)
+})
+
+
 app.get("/questionnaires/:id", async (req, res) => {
   const id = req.params.id;
   const questionnaires = await prisma.questionnaire.findMany({
@@ -102,8 +116,31 @@ app.get("/questionnaires/:id", async (req, res) => {
       id: Number(id),
     },
   });
-  return res.json(questionnaires);
-});
+  return res.json(questionnaires)
+})
+
+// 商品名条件で商品を取得
+app.get('/itemName/:name', async (req, res) => {
+  const name = req.params.name;
+  const items = await prisma.item.findMany({
+    where: {
+      name: {
+        equals: name,
+      },
+    },
+  });
+  return res.json(items);
+})
+
+// 商品追加
+app.post('/items', async (req, res) => {
+  const { name, description, itemCategory, inTheOffice, approval, author, pollItem, isDiscontinued } = req.body
+  const item = await prisma.item.create({
+    data: { name, description, itemCategory, inTheOffice, approval, author, pollItem, isDiscontinued }
+  })
+  return res.json(item)
+})
+
 app.post("/questionnaires", async (req, res) => {
   const { name, description, createdAt, category,endDate,startDate,author,polleditems} = req.body;
   const questionnaires = await prisma.questionnaire.create({
