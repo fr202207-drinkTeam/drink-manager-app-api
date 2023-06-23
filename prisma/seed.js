@@ -29,6 +29,170 @@ async function main() {
       isAdmin: false,
     },
   });
+  //投票
+  await prisma.questionnaire.create({
+    data: {
+      id:1,
+      name:"テストテスト",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:1,
+      startDate:"2023-05-10T08:16:34.851Z",
+      endDate:"2023-05-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:2,
+      name:"テストテスト2",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:2,
+      startDate:"2023-06-01T08:16:34.851Z",
+      endDate:"2023-06-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:3,
+      name:"テストテスト3",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:1,
+      startDate:"2023-06-01T08:16:34.851Z",
+      endDate:"2023-06-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:4,
+      name:"テストテスト4",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:1,
+      startDate:"2023-07-01T08:16:34.851Z",
+      endDate:"2023-07-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:5,
+      name:"テストテスト5",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:2,
+      startDate:"2023-07-01T08:16:34.851Z",
+      endDate:"2023-07-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:6,
+      name:"テストテスト6",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:2,
+      startDate:"2023-08-01T08:16:34.851Z",
+      endDate:"2023-08-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.questionnaire.create({
+    data: {
+      id:7,
+      name:"テストテスト7",
+      description:"テストです。",
+      createdAt:new Date(),
+      category:2,
+      startDate:"2023-10-01T08:16:34.851Z",
+      endDate:"2023-10-30T08:16:34.851Z",
+      author:1,
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:1,
+      itemId:4,//既存itemIdに後で変更
+      questionnairId:3
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:2,
+      itemId:5,//既存itemIdに後で変更
+      questionnairId:2
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:3,
+      itemId:5,//既存itemIdに後で変更
+      questionnairId:3
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:4,
+      itemId:4,//既存itemIdに後で変更
+      questionnairId:2
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:5,
+      itemId:5,//既存itemIdに後で変更
+      questionnairId:1
+    },
+  });
+  await prisma.polledItem.create({
+    data: {
+      id:6,
+      itemId:4,//既存itemIdに後で変更
+      questionnairId:1
+    },
+  });
+  await prisma.poll.create({
+    data: {
+      userId:2,
+      questionnaireId:2,
+      result:4,
+      category:1,
+      createdAt:new Date()
+    },
+  });
+  await prisma.poll.create({
+    data: {
+      userId:2,
+      questionnaireId:2,
+      result:5,
+      category:1,
+      createdAt:new Date()
+    },
+  });
+  await prisma.poll.create({
+    data: {
+      userId:2,
+      questionnaireId:1,
+      result:4,
+      category:1,
+      createdAt:new Date()
+    },
+  });
+  await prisma.poll.create({
+    data: {
+      userId:2,
+      questionnaireId:1,
+      result:5,
+      category:1,
+      createdAt:new Date()
+    },
+  });
+//
 }
 
 main()

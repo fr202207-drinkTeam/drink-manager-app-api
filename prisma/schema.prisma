@@ -21,6 +21,7 @@ model Questionnaire {
   endDate   DateTime
   author    Int
   Polleditems PolledItem[]
+  Poll Poll[]
   @@map("Questionnaires")
 }
 
@@ -35,6 +36,7 @@ model PolledItem {
 model Poll {
   id Int  @id @default(autoincrement())
   questionnaireId Int
+  Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
   category Int
@@ -53,15 +55,17 @@ model User {
   authId String
   @@map("Users")
 }
-
 model Item {
   id    Int     @id @default(autoincrement())
   name String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
   itemCategory Int
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  inTheOffice Boolean
-  author Int
+  createdAt DateTime  @default(now())
+  inTheOffice Boolean?
+  author String
+  approval Boolean
+  manufacturer String?
+  purchaseLocation String?
   pollItem Boolean
   isDiscontinued Boolean
   @@map("Items")
