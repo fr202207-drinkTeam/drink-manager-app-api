@@ -20,7 +20,14 @@ app.get("/items", async (req, res) => {
   return res.json(items);
 });
 
-app.post("/posts", postController.postAddPost);
+// 新規投稿
+app.post("/posts", postController.addPost);
+
+// 投稿編集
+app.patch("/posts/:postId", postController.editPost)
+
+// 投稿削除
+app.delete("/posts/:postId", postController.deletePost)
 
 //投票//
 app.get("/questionnaires", async (req, res) => {
