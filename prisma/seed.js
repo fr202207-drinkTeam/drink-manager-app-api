@@ -161,7 +161,7 @@ async function main() {
     data: {
       userId:2,
       questionnaireId:2,
-      result:4,
+      result:10,
       category:1,
       createdAt:new Date()
     },
@@ -170,7 +170,7 @@ async function main() {
     data: {
       userId:2,
       questionnaireId:2,
-      result:5,
+      result:9,
       category:1,
       createdAt:new Date()
     },
@@ -179,7 +179,7 @@ async function main() {
     data: {
       userId:2,
       questionnaireId:1,
-      result:4,
+      result:10,
       category:1,
       createdAt:new Date()
     },
@@ -188,7 +188,7 @@ async function main() {
     data: {
       userId:2,
       questionnaireId:1,
-      result:5,
+      result:9,
       category:1,
       createdAt:new Date()
     },
