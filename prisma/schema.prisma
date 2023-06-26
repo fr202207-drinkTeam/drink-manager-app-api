@@ -21,6 +21,7 @@ model Questionnaire {
   endDate   DateTime
   author    Int
   Polleditems PolledItem[]
+  Poll Poll[]
   @@map("Questionnaires")
 }
 
@@ -35,8 +36,10 @@ model PolledItem {
 model Poll {
   id Int  @id @default(autoincrement())
   questionnaireId Int
+  Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
+  category Int
   createdAt DateTime @default(now())
   @@map("Polls")
 }
@@ -52,10 +55,9 @@ model User {
   authId String
   @@map("Users")
 }
-
 model Item {
   id    Int     @id @default(autoincrement())
-  name String  @unique @db.VarChar(18)
+  itemName String  @unique @db.VarChar(18)
   description  String @db.VarChar(200)
   itemCategory Int
   createdAt DateTime  @default(now())
@@ -66,6 +68,7 @@ model Item {
   purchaseLocation String?
   pollItem Boolean
   isDiscontinued Boolean
+  images ItemImage[]
   posts Post[]
   @@map("Items")
 }
@@ -129,8 +132,9 @@ model ItemCategory {
 
 model ItemImage {
   id    Int     @id @default(autoincrement())
+  item   Item   @relation(fields: [itemId], references: [id])
   itemId Int
-  imagePath String
+  imagePath String 
   createdAt DateTime  @default(now())
   @@map("ItemImages")
 }
