@@ -39,6 +39,7 @@ model Poll {
   Questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id],onDelete: Cascade)
   userId Int
   result Int
+  category Int
   createdAt DateTime @default(now())
   @@map("Polls")
 }
@@ -68,7 +69,7 @@ model Item {
   pollItem Boolean
   isDiscontinued Boolean
   images ItemImage[]
-  posts PostImage[]
+  posts Post[]
   @@map("Items")
 }
 

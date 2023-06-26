@@ -1,2 +1,0 @@
--- AddForeignKey
-ALTER TABLE "Posts" ADD CONSTRAINT "Posts_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
