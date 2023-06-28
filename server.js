@@ -5,7 +5,7 @@ const PORT = 50000;
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const cors = require("cors");
-const postController = require('./controllers/postController')
+const postController = require("./controllers/postController");
 
 // CORS設定
 app.use(cors());
@@ -24,10 +24,10 @@ app.get("/items", async (req, res) => {
 app.post("/posts", postController.addPost);
 
 // 投稿編集
-app.patch("/posts/:postId", postController.editPost)
+app.patch("/posts/:postId", postController.editPost);
 
 // 投稿削除
-app.delete("/posts/:postId", postController.deletePost)
+app.delete("/posts/:postId", postController.deletePost);
 
 //投票//
 app.get("/questionnaires", async (req, res) => {
@@ -41,7 +41,7 @@ app.get("/questionnaires/:category", async (req, res) => {
     const category = parseInt(req.params.category);
     const questionnaires = await prisma.questionnaire.findMany({
       where: {
-        category:category,
+        category: category,
       },
       include: {
         Polleditems: true,
@@ -71,8 +71,8 @@ app.get("/pollcategory/:category", async (req, res) => {
     const category = parseInt(req.params.category);
     const polls = await prisma.poll.findMany({
       where: {
-        category:category,
-      }
+        category: category,
+      },
     });
     return res.json(polls);
   } catch (error) {
@@ -91,10 +91,10 @@ app.get("/polls/:id", async (req, res) => {
   return res.json(polls);
 });
 app.get("/pollsdata/:questionnaireId", async (req, res) => {
-  const questionnaireId = parseInt(req.params.questionnaireId) ;
+  const questionnaireId = parseInt(req.params.questionnaireId);
   const polls = await prisma.poll.findMany({
     where: {
-      questionnaireId:Number(questionnaireId)
+      questionnaireId: Number(questionnaireId),
     },
   });
   return res.json(polls);
@@ -164,16 +164,47 @@ app.put("/discontinuedItem/:id", async (req, res) => {
 // 商品更新
 app.put("/itemedit/:id", async (req, res) => {
   const id = req.params.id;
+  const {
+    itemName,
+    description,
+    itemCategory,
+    inTheOffice,
+    author,
+    approval,
+    manufacturer,
+    purchaseLocation,
+    images,
+  } = req.body;
+  images.map((image) => {
+    return (
+      {
+          where: { itemId: id },
+          data: { imagePath: image }
+        }
+    )
+  });
 
   const result = await prisma.item.update({
     where: { id: Number(id) },
-    data: req.body,
+    data: {
+      itemName: itemName,
+      description: description,
+      itemCategory: itemCategory,
+      inTheOffice: inTheOffice,
+      author: author,
+      approval: approval,
+      manufacturer: manufacturer,
+      purchaseLocation: purchaseLocation,
+      images: {
+        updateMany: images
+      },
+    },
   });
 
   res.json(result);
 });
 
-// 商品画像追加
+// 商品追加
 app.post("/additem", async (req, res) => {
   const {
     itemName,
@@ -214,6 +245,22 @@ app.post("/additem", async (req, res) => {
   return res.json(item);
 });
 
+// 社内ありでお菓子以外の商品取得
+app.get("/intheofficeitems", async (req, res) => {
+  const items = await prisma.item.findMany({
+    where: {
+      inTheOffice: true,
+      NOT: {
+        itemCategory: 8
+      }
+    },
+    include: {
+      stock: true,
+    },
+  });
+  return res.json(items);
+});
+
 app.get("/questionnaires/:id", async (req, res) => {
   const id = req.params.id;
   const questionnaires = await prisma.questionnaire.findMany({
@@ -225,7 +272,16 @@ app.get("/questionnaires/:id", async (req, res) => {
 });
 
 app.post("/questionnaires", async (req, res) => {
-  const { name, description, createdAt, category,endDate,startDate,author,polleditems} = req.body;
+  const {
+    name,
+    description,
+    createdAt,
+    category,
+    endDate,
+    startDate,
+    author,
+    polleditems,
+  } = req.body;
   const questionnaires = await prisma.questionnaire.create({
     data: {
       name,
@@ -241,7 +297,7 @@ app.post("/questionnaires", async (req, res) => {
   return res.json(questionnaires);
 });
 app.post("/polleditems", async (req, res) => {
-  const { itemId,questionnairId} = req.body;
+  const { itemId, questionnairId } = req.body;
   const questionnaires = await prisma.polleditem.create({
     data: {
       itemId,
@@ -251,7 +307,7 @@ app.post("/polleditems", async (req, res) => {
   return res.json(questionnaires);
 });
 app.post("/poll", async (req, res) => {
-  const { userId,questionnaireId,result,category,createdAt} = req.body;
+  const { userId, questionnaireId, result, category, createdAt } = req.body;
   const poll = await prisma.poll.create({
     data: {
       userId,
@@ -281,20 +337,20 @@ app.post("/user", async (req, res) => {
   return res.json(user);
 });
 app.get("/user/:id", async (req, res) => {
-  const id = parseInt(req.params.id) ;
+  const id = parseInt(req.params.id);
   const user = await prisma.user.findMany({
-    where:{
-      id: Number(id)
-    }
+    where: {
+      id: Number(id),
+    },
   });
   return res.json(user);
 });
 app.get("/userauth/:authId", async (req, res) => {
-  const authId=req.params.authId
+  const authId = req.params.authId;
   const users = await prisma.user.findMany({
-    where:{
-      authId
-    }
+    where: {
+      authId,
+    },
   });
   return res.json(users);
 });

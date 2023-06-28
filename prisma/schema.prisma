@@ -70,6 +70,7 @@ model Item {
   isDiscontinued Boolean
   images ItemImage[]
   posts Post[]
+  stock StockHistory[]
   @@map("Items")
 }
 
@@ -116,7 +117,8 @@ model Like {
 
 model StockHistory {
   id    Int     @id @default(autoincrement())
-  itamId Int
+  itemId Int
+  item   Item   @relation(fields: [itemId], references: [id])
   quantity Int
   createdAt DateTime  @default(now())
   incOrDec Boolean
