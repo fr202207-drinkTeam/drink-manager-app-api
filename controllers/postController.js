@@ -1,5 +1,94 @@
 const { PrismaClient } = require("@prisma/client");
+const { skip } = require("node:test");
 const prisma = new PrismaClient();
+
+// 投稿取得
+exports.getPost = async (req, res, next) => {
+  console.log("クエリ", req.query);
+  const { category, search, quantity } = req.query;
+
+  // 投稿の絞込み用
+  let isAdmin;
+  if (category === "admin") {
+    isAdmin = true;
+  } else if (category === "user") {
+    isAdmin = false;
+  }
+
+  await prisma.post
+    .findMany({
+      where: {
+        AND: [
+          // 投稿絞込み条件
+          {
+            user: {
+              is: {
+                isAdmin,
+              },
+            },
+          },
+
+          // 検索条件
+          {
+            OR: [
+              {
+                content: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                user: {
+                  is: { firstName: { contains: search, mode: "insensitive" } },
+                },
+              },
+              {
+                user: {
+                  is: { lastName: { contains: search, mode: "insensitive" } },
+                },
+              },
+              {
+                item: {
+                  is: { itemName: { contains: search, mode: "insensitive" } },
+                },
+              },
+              {
+                item: {
+                  is: {
+                    manufacturer: { contains: search, mode: "insensitive" },
+                  },
+                },
+              },
+              {
+                item: {
+                  is: {
+                    purchaseLocation: { contains: search, mode: "insensitive" },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      orderBy: { createdAt: "desc" },
+      skip: parseInt(quantity - 3),
+      take: 3,
+      include: {
+        user: { select: { firstName: true, lastName: true, isAdmin: true } },
+        item: true,
+        postImages: true,
+      },
+    })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch(async (e) => {
+      console.log(e);
+      await prisma.$disconnect();
+      res.status(500).send("データの取得に失敗しました");
+      process.exit(1);
+    });
+};
 
 // 新規投稿
 exports.addPost = async (req, res, next) => {
@@ -22,12 +111,14 @@ exports.addPost = async (req, res, next) => {
         },
       },
     })
+    .then(() => {
+      res.status(200).send("投稿に成功しました！");
+    })
     .catch(async (e) => {
       await prisma.$disconnect();
       res.status(500).send("データベースへの保存に失敗しました。");
       process.exit(1);
     });
-  res.status(200).send("投稿に成功しました！");
 };
 
 // 投稿編集
@@ -60,18 +151,26 @@ exports.editPost = async (req, res, next) => {
         },
       },
     })
+    .then(() => {
+      res.status(200).send("投稿編集に成功しました！");
+    })
     .catch(async (e) => {
       await prisma.$disconnect();
       res.status(500).send("データベースへの保存に失敗しました。");
       process.exit(1);
     });
-  res.status(200).send("投稿編集に成功しました！");
 };
 
 // 投稿削除
 exports.deletePost = async (req, res, next) => {
   const postId = parseInt(req.params.postId);
-  await prisma.post.delete({
-    where: { id: postId },
-  });
+  await prisma.post
+    .delete({
+      where: { id: postId },
+    })
+    .catch(async (e) => {
+      await prisma.$disconnect();
+      res.status(500).send("削除に失敗しました。");
+      process.exit(1);
+    });
 };

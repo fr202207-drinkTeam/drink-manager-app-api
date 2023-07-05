@@ -53,8 +53,10 @@ model User {
   confirmPassword String @db.VarChar(16)
   isAdmin Boolean
   authId String
+  posts Post[]
   @@map("Users")
 }
+
 model Item {
   id    Int     @id @default(autoincrement())
   itemName String  @unique @db.VarChar(18)
@@ -76,6 +78,7 @@ model Item {
 
 model Post {
   id    Int     @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
   userId Int
   content String @db.VarChar(255)
   item Item? @relation(fields: [itemId], references: [id])
