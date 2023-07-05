@@ -20,6 +20,9 @@ app.get("/items", async (req, res) => {
   return res.json(items);
 });
 
+// 投稿取得
+app.get("/posts", postController.getPost)
+
 // 新規投稿
 app.post("/posts", postController.addPost);
 
@@ -272,6 +275,7 @@ app.get("/user/:email", async (req, res) => {
       email,
     },
   });
+  console.log("here", user)
   return res.json(user);
 });
 app.post("/user", async (req, res) => {
